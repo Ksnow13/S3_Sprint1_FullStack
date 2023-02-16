@@ -15,5 +15,10 @@
   "bugs": {
     "url": "https://github.com/Ksnow13/S3_Sprint1_FullStack/issues"
   },
-  "homepage": "https://github.com/Ksnow13/S3_Sprint1_FullStack#readme"
+  "homepage": "https://github.com/Ksnow13/S3_Sprint1_FullStack#readme",
+  "dependencies": {
+    "crc": "^4.3.2",
+    "date-fns": "^2.29.3",
+    "uuid": "^9.0.0"
+  }
 }
