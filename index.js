@@ -15,6 +15,8 @@ global.DEBUG = true;
 
 const { initializeApp } = require("./scripts/initialize");
 
+const { configurationApp } = require("./scripts/configuration");
+
 const { usagetxt } = require("./scripts/template");
 
 const Args = process.argv.slice(2);
@@ -31,6 +33,7 @@ switch (Args[0]) {
   case "config":
   case "c":
     if (DEBUG) console.log(Args[0], " - display the configuration file");
+    configurationApp();
     break;
   case "token":
   case "t":
