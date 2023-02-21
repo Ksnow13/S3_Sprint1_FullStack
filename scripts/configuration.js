@@ -117,10 +117,55 @@ function setConfig() {
 
 //-----------------------------------------------------------------------
 
+function resetConfig() {
+  if (DEBUG) console.log("config.ressetConfig(): started\n");
+  if (DEBUG) console.log(Args);
+
+  if (fs.existsSync("./scripts/json/config.json")) {
+    let defaultConfigData = JSON.stringify(configurationJson, null, 2);
+    fs.readFile(__dirname + "/json/config.json", (error, data) => {
+      if (!error) {
+        fs.writeFile(
+          __dirname + "/json/config.json",
+          defaultConfigData,
+          (error) => {
+            if (error) throw error;
+            if (DEBUG) console.log("Config file reset to original state");
+            myEmitter.emit(
+              "log",
+              "config.resetConfig()",
+              "INFO",
+              "config.json reset to original state."
+            );
+          }
+        );
+      } else {
+        console.log(error);
+        myEmitter.emit(
+          "log",
+          "config.resetConfig()",
+          "ERROR",
+          "failed to reset config.json"
+        );
+      }
+    });
+  } else {
+    console.log("config.json file doesnt exist");
+    myEmitter.emit(
+      "log",
+      "config.resetConfig()",
+      "ERROR",
+      "config.json file doesnt exist"
+    );
+  }
+}
+
+//-----------------------------------------------------------------------
+
 const Args = process.argv.slice(2);
 
 function configurationApp() {
-  if (DEBUG) console.log("init.configurationApp(): started");
+  if (DEBUG) console.log("config.configurationApp(): started");
 
   switch (Args[1]) {
     case "--show":
@@ -130,6 +175,10 @@ function configurationApp() {
     case "--set":
       if (DEBUG) console.log("--set config.setConfig(): reached");
       setConfig();
+      break;
+    case "--reset":
+      if (DEBUG) console.log("--reset config.resetConfig(): reached");
+      resetConfig();
       break;
     case "--help":
     case "--h":
