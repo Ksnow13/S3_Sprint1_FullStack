@@ -156,7 +156,8 @@ function createFiles() {
           });
         }
       }
-      //----
+
+      //--------
 
       if (fs.existsSync("./scripts/views")) {
         try {

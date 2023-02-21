@@ -17,6 +17,8 @@ const { initializeApp } = require("./scripts/initialize");
 
 const { configurationApp } = require("./scripts/configuration");
 
+const { tokenApp } = require("./scripts/token");
+
 const { usagetxt } = require("./scripts/template");
 
 const Args = process.argv.slice(2);
@@ -38,6 +40,7 @@ switch (Args[0]) {
   case "token":
   case "t":
     if (DEBUG) console.log(Args[0], " - generate a user token");
+    tokenApp();
     break;
   case "--help":
   case "--h":
