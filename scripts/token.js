@@ -12,7 +12,7 @@ const myEmitter = new MyEmitter();
 myEmitter.on("log", (event, level, msg) => logEvents(event, level, msg));
 
 const crc32 = require("crc/crc32");
-const { format, nextWednesday, addDays } = require("date-fns");
+const { format, addDays } = require("date-fns");
 const { tokentxt } = require("./template");
 
 //-----------------------------------------------------------------------------------
@@ -102,6 +102,7 @@ function newToken(username) {
       if (error) throw error;
 
       let tokens = JSON.parse(data);
+
       //-----------------------------------
 
       let userMatch = false;
@@ -161,6 +162,272 @@ function newToken(username) {
 
 //-----------------------------------------------------------------------------------
 
+function updateToken() {
+  if (DEBUG) console.log("token.updateToken(): started\n");
+  if (DEBUG) console.log(Args);
+
+  if (fs.existsSync("./scripts/json/tokens.json")) {
+    fs.readFile(__dirname + "/json/tokens.json", "utf-8", (error, data) => {
+      if (error) throw error;
+
+      let tokens = JSON.parse(data);
+
+      userFound = false;
+
+      tokens.forEach((obj) => {
+        if (obj.username === Args[3]) {
+          userFound = true;
+        }
+      });
+
+      console.log(userFound);
+
+      if (userFound === true) {
+        tokens.forEach((obj) => {
+          if (obj.username === Args[3]) {
+            if (DEBUG) console.log(obj);
+            switch (Args[2]) {
+              case "p":
+              case "P":
+              case "phone":
+              case "Phone":
+              case "PHONE":
+                obj.phone = Args[4];
+                addUpdate(obj);
+                break;
+              case "e":
+              case "E":
+              case "email":
+              case "Email":
+              case "EMAIL":
+                obj.email = Args[4];
+                addUpdate(obj);
+                break;
+              default:
+                if (DEBUG) console.log(`unknow command ${Args[2]} was passed`);
+                if (DEBUG)
+                  console.log(`try --token [username] [phone or email]`);
+                myEmitter.emit(
+                  "log",
+                  "token.updateToken()",
+                  "ERROR",
+                  ` unknow command ${Args[2]} was passed.`
+                );
+            }
+            if (DEBUG) console.log(obj);
+          }
+          function addUpdate(obj) {
+            userTokens = JSON.stringify(tokens);
+            fs.writeFile(__dirname + "/json/tokens.json", userTokens, (err) => {
+              if (err) console.log(err);
+              else {
+                console.log(
+                  `Token record for ${Args[3]} was updated with ${Args[4]}.`
+                );
+                myEmitter.emit(
+                  "log",
+                  "token.updateToken()",
+                  "INFO",
+                  `Token record for ${Args[3]} was updated with ${Args[4]}.`
+                );
+              }
+            });
+          }
+        });
+      } else if (userFound === false) {
+        console.log(`username ${Args[3]} not found`);
+        myEmitter.emit(
+          "log",
+          "token.updateToken()",
+          "ERROR",
+          `username ${Args[3]} not found`
+        );
+      }
+    });
+  } else {
+    console.log("token.josn file doesnt exist");
+    myEmitter.emit(
+      "log",
+      "token.updateToken()",
+      "ERROR",
+      "token.json file doesnt exist"
+    );
+  }
+}
+
+//-----------------------------------------------------------------------------------
+
+function searchTokenByUsername(username) {
+  if (DEBUG) console.log("token.searchToken(): started\n");
+  if (DEBUG) console.log(Args);
+
+  if (fs.existsSync("./scripts/json/tokens.json")) {
+    fs.readFile(__dirname + "/json/tokens.json", "utf-8", (error, data) => {
+      if (error) throw error;
+
+      let tokens = JSON.parse(data);
+      userFound = false;
+
+      tokens.forEach((obj) => {
+        if (obj.username === username) {
+          userFound = true;
+        }
+      });
+
+      console.log(userFound);
+
+      if (userFound === true) {
+        tokens.forEach((obj) => {
+          if (obj.username === username) {
+            if (DEBUG) console.log(`** Record for ${username} was found. **`);
+            console.log(obj);
+          }
+        });
+        myEmitter.emit(
+          "log",
+          "token.fetchRecord()",
+          "INFO",
+          `Token record for ${username} was displayed.`
+        );
+        if (DEBUG) console.log(`Record for ${username} was successfull`);
+      } else if (userFound === false) {
+        console.log(`the username entered was not found`);
+        myEmitter.emit(
+          "log",
+          "token.searchToken()",
+          "ERROR",
+          `username ${username} not found`
+        );
+      }
+    });
+  } else {
+    console.log("token.josn file doesnt exist");
+    myEmitter.emit(
+      "log",
+      "token.searchToken()",
+      "ERROR",
+      "token.json file doesnt exist"
+    );
+  }
+}
+
+//-----------------------------------------------------------------------------------
+
+function searchTokenByEmail(email) {
+  if (DEBUG) console.log("token.searchToken(): started\n");
+  if (DEBUG) console.log(Args);
+
+  if (fs.existsSync("./scripts/json/tokens.json")) {
+    fs.readFile(__dirname + "/json/tokens.json", "utf-8", (error, data) => {
+      if (error) throw error;
+
+      let tokens = JSON.parse(data);
+      userFound = false;
+
+      tokens.forEach((obj) => {
+        if (obj.email === email) {
+          userFound = true;
+        }
+      });
+
+      console.log(userFound);
+
+      if (userFound === true) {
+        tokens.forEach((obj) => {
+          if (obj.email === email) {
+            if (DEBUG)
+              console.log(`** Record with email ${email} was found. **`);
+            console.log(obj);
+          }
+        });
+        myEmitter.emit(
+          "log",
+          "token.fetchRecord()",
+          "INFO",
+          `Token record with email ${email} was displayed.`
+        );
+        if (DEBUG) console.log(`Record with email ${email} was successfull`);
+      } else if (userFound === false) {
+        console.log(`the email entered was not found`);
+        myEmitter.emit(
+          "log",
+          "token.searchToken()",
+          "ERROR",
+          `the email ${email} not found`
+        );
+      }
+    });
+  } else {
+    console.log("token.josn file doesnt exist");
+    myEmitter.emit(
+      "log",
+      "token.searchToken()",
+      "ERROR",
+      "token.json file doesnt exist"
+    );
+  }
+}
+
+//-----------------------------------------------------------------------------------
+
+function searchTokenByPhone(phone) {
+  if (DEBUG) console.log("token.searchToken(): started\n");
+  if (DEBUG) console.log(Args);
+
+  if (fs.existsSync("./scripts/json/tokens.json")) {
+    fs.readFile(__dirname + "/json/tokens.json", "utf-8", (error, data) => {
+      if (error) throw error;
+
+      let tokens = JSON.parse(data);
+      userFound = false;
+
+      tokens.forEach((obj) => {
+        if (obj.phone === phone) {
+          userFound = true;
+        }
+      });
+
+      console.log(userFound);
+
+      if (userFound === true) {
+        tokens.forEach((obj) => {
+          if (obj.phone === phone) {
+            if (DEBUG)
+              console.log(`** Record with phone number ${phone} was found. **`);
+            console.log(obj);
+          }
+        });
+        myEmitter.emit(
+          "log",
+          "token.fetchRecord()",
+          "INFO",
+          `Token record with phone number ${phone} was displayed.`
+        );
+        if (DEBUG)
+          console.log(`Record with phone number ${phone} was successfull`);
+      } else if (userFound === false) {
+        console.log(`the phone number entered was not found`);
+        myEmitter.emit(
+          "log",
+          "token.searchToken()",
+          "ERROR",
+          `the phone number ${phone} not found`
+        );
+      }
+    });
+  } else {
+    console.log("token.josn file doesnt exist");
+    myEmitter.emit(
+      "log",
+      "token.searchToken()",
+      "ERROR",
+      "token.json file doesnt exist"
+    );
+  }
+}
+
+//----------------------------------------------------------------------------------
+
 const Args = process.argv.slice(2);
 
 function tokenApp() {
@@ -178,6 +445,38 @@ function tokenApp() {
         newToken(Args[2]);
       }
       break;
+    case "--update":
+    case "--upd":
+      if (DEBUG) console.log("--count  token.countToken: reached");
+      updateToken();
+      break;
+    case "--search":
+      if (DEBUG) console.log("--search  token.searchToken: reached");
+      switch (Args[2]) {
+        case "u":
+          searchTokenByUsername(Args[3]);
+          break;
+        case "e":
+          searchTokenByEmail(Args[3]);
+          break;
+        case "p":
+          searchTokenByPhone(Args[3]);
+          break;
+        default:
+          if (DEBUG)
+            console.log(
+              "invalid syntax. node myapp token --search [u] [username]"
+            );
+          if (DEBUG)
+            console.log(
+              "invalid syntax. node myapp token --search [e] [email]"
+            );
+          if (DEBUG)
+            console.log(
+              "invalid syntax. node myapp token --search [p] [phone]"
+            );
+      }
+      break;
     case "--help":
     case "--h":
     default:
@@ -189,4 +488,5 @@ module.exports = {
   tokenApp,
   countToken,
   newToken,
+  updateToken,
 };
