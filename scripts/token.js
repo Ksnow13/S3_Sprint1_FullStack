@@ -74,11 +74,53 @@ function countToken() {
 
 //-----------------------------------------------------------------------------------
 
+function listToken() {
+  if (DEBUG) console.log("token.listToken(): started\n");
+  if (DEBUG) console.log(Args);
+
+  if (fs.existsSync("./scripts/json/tokens.json")) {
+    fs.readFile(__dirname + "/json/tokens.json", "utf-8", (error, data) => {
+      if (!error) {
+        let tokens = JSON.parse(data);
+        console.log("** User List **");
+        tokens.forEach((obj) => {
+          console.log(" * " + obj.username + ": " + obj.token);
+        });
+        myEmitter.emit(
+          "log",
+          "token.listToken()",
+          "INFO",
+          `Current token list was displayed.`
+        );
+      } else {
+        console.log(error);
+        myEmitter.emit(
+          "log",
+          "token.listToken()",
+          "ERROR",
+          "failed to list tokens"
+        );
+      }
+    });
+  } else {
+    console.log("token.josn file doesnt exist");
+    myEmitter.emit(
+      "log",
+      "token.countToken()",
+      "ERROR",
+      "token.json file doesnt exist"
+    );
+  }
+}
+
+//-----------------------------------------------------------------------------------
+
 function newToken(username) {
   if (DEBUG) console.log("token.newToken(): started\n");
   if (DEBUG) console.log(Args);
 
   let now = new Date();
+
   let expiry = addDays(now, 3);
 
   var tokenToEnter = JSON.parse(`{
@@ -112,7 +154,6 @@ function newToken(username) {
           userMatch = true;
         }
       }
-      console.log(userMatch);
 
       if (!userMatch) {
         tokens.push(tokenToEnter);
@@ -158,6 +199,8 @@ function newToken(username) {
       "token.json file doesnt exist"
     );
   }
+
+  return tokenToEnter.token;
 }
 
 //-----------------------------------------------------------------------------------
@@ -428,6 +471,74 @@ function searchTokenByPhone(phone) {
 
 //----------------------------------------------------------------------------------
 
+function checkExperyDate() {
+  if (DEBUG) console.log("token.checkExperyDate(): started\n");
+  if (DEBUG) console.log(Args);
+
+  if (fs.existsSync("./scripts/json/tokens.json")) {
+    return new Promise(function (resolve, reject) {
+      fs.readFile(__dirname + "/json/tokens.json", "utf-8", (error, data) => {
+        if (!error) {
+          let tokens = JSON.parse(data);
+
+          let now = new Date();
+
+          console.log("** expired users **\n");
+
+          let count = 0;
+
+          let expiryList = [];
+
+          tokens.forEach((obj) => {
+            ex = new Date(obj.expiry);
+            if (ex < now) {
+              console.log(`- ${obj.username}'s token expired on ${obj.expiry}`);
+              count++;
+              expiryList.push(obj);
+            }
+          });
+
+          if (DEBUG) console.log(expiryList);
+          console.log("");
+
+          if (count > 0) {
+            console.log(`Total tokens expired: ${count}`);
+          } else {
+            console.log("No tokens are currently expired.");
+          }
+
+          myEmitter.emit(
+            "log",
+            "token.checkExperyDate()",
+            "INFO",
+            `List of expired tokens displayed.`
+          );
+
+          resolve(expiryList);
+        } else {
+          console.log(error);
+          myEmitter.emit(
+            "log",
+            "token.checkExperyDate()",
+            "ERROR",
+            "failed to list tokens"
+          );
+        }
+      });
+    });
+  } else {
+    console.log("token.josn file doesnt exist");
+    myEmitter.emit(
+      "log",
+      "token.countToken()",
+      "ERROR",
+      "token.json file doesnt exist"
+    );
+  }
+}
+
+//-----------------------------------------------------------------------------------
+
 const Args = process.argv.slice(2);
 
 function tokenApp() {
@@ -436,6 +547,10 @@ function tokenApp() {
     case "--count":
       if (DEBUG) console.log("--count  token.countToken: reached");
       countToken();
+      break;
+    case "--list":
+      if (DEBUG) console.log("--count  token.listToken: reached");
+      listToken();
       break;
     case "--new":
       if (Args.length !== 3) {
@@ -449,6 +564,10 @@ function tokenApp() {
     case "--upd":
       if (DEBUG) console.log("--count  token.countToken: reached");
       updateToken();
+      break;
+    case "--expired":
+      if (DEBUG) console.log("--search  token.checkExperyDate: reached");
+      checkExperyDate();
       break;
     case "--search":
       if (DEBUG) console.log("--search  token.searchToken: reached");
@@ -489,4 +608,5 @@ module.exports = {
   countToken,
   newToken,
   updateToken,
+  checkExperyDate,
 };
