@@ -128,7 +128,14 @@ const server = http.createServer(async (request, response) => {
   }
 });
 
-server.listen(3000);
+//server.listen(3000);
+
+server.listen(3000, "localhost", () => {
+  console.log(
+    "listening on port 3000, Visit http://localhost:3000/ to view the page."
+  );
+  console.log("Press Ctrl C to terminate...");
+});
 
 //----------------------------------------------
 

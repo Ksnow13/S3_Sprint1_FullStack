@@ -11,8 +11,6 @@
 
 global.DEBUG = true;
 
-//const fs = require("fs");
-
 const { initializeApp } = require("./scripts/initialize");
 
 const { configurationApp } = require("./scripts/configuration");
@@ -28,18 +26,17 @@ if (DEBUG)
 switch (Args[0]) {
   case "init":
   case "i":
-    if (DEBUG)
-      console.log("Arg", Args[0], "was passed, initializeApp() was reached\n");
+    if (DEBUG) console.log(Args[0], " - initializeApp() was reached\n");
     initializeApp();
     break;
   case "config":
   case "c":
-    if (DEBUG) console.log(Args[0], " - display the configuration file");
+    if (DEBUG) console.log(Args[0], " - configurationApp() was reached\n");
     configurationApp();
     break;
   case "token":
   case "t":
-    if (DEBUG) console.log(Args[0], " - generate a user token");
+    if (DEBUG) console.log(Args[0], " - tokenApp() was reached\n");
     tokenApp();
     break;
   case "--help":

@@ -124,10 +124,10 @@ function newToken(username) {
   let expiry = addDays(now, 3);
 
   var tokenToEnter = JSON.parse(`{
-    "username": "username",
+    "username": "example_username",
     "email": "user@example.com",
-    "phone": "5556597890",
-    "token": "token",
+    "phone": "0000000000",
+    "token": "example_token",
     "created": "1969-01-31 12:30:00",
     "expiry": "1969-02-03 12:30:00",
     "confirmed": "tbd",
@@ -493,6 +493,7 @@ function checkExperyDate() {
             ex = new Date(obj.expiry);
             if (ex < now) {
               console.log(`- ${obj.username}'s token expired on ${obj.expiry}`);
+              obj.status = "expired";
               count++;
               expiryList.push(obj);
             }
