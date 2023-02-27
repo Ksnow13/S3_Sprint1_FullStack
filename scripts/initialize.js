@@ -1,4 +1,4 @@
-//
+//-------------------------------------------------------------------------
 
 const fs = require("fs");
 
@@ -10,8 +10,6 @@ const eventLogs = require("./logEvent");
 const EventEmitter = require("events");
 class MyEmitter extends EventEmitter {}
 const myEmitter = new MyEmitter();
-
-//------------------------------------------------------------------------
 
 myEmitter.on("log", (event, level, msg) => eventLogs(event, level, msg));
 
@@ -28,7 +26,7 @@ const {
 } = require("./template");
 
 function createFolders() {
-  if (DEBUG) console.log("init.createFolders(): started\n");
+  if (DEBUG) console.log("createFolders(): started\n");
 
   let count = 0;
   let match = 0;
@@ -51,7 +49,7 @@ function createFolders() {
 
   console.log("\n");
 
-  if (DEBUG) console.log(`${match} folders found that already existed`);
+  if (DEBUG) console.log(`${match} folders found that already exist`);
 
   if (count === 0) {
     console.log(" ** all folder alreadys exist **\n");
@@ -62,14 +60,12 @@ function createFolders() {
       "All folders already existed."
     );
   } else if (count < folders.length && match > 0) {
-    console.log(
-      `** ${count} of ${folders.length} total folders were created **\n`
-    );
+    console.log(`** ${count} of ${folders.length} folders were created **\n`);
     myEmitter.emit(
       "log",
       "init.createFolders()",
       "INFO",
-      count + " of " + folders.length + " folders needed to be created."
+      count + " of " + folders.length + " folders were created."
     );
   } else if (match === 0) {
     console.log(" ** All folders successfully created **\n");
@@ -85,7 +81,7 @@ function createFolders() {
 //---------------------------------------------------------------------------------------
 
 function createFiles() {
-  if (DEBUG) console.log("init.createFiles(): started\n");
+  if (DEBUG) console.log("createFiles(): started\n");
 
   if (fs.existsSync("./scripts/json")) {
     try {
@@ -93,7 +89,7 @@ function createFiles() {
 
       if (!fs.existsSync(path.join(__dirname, "./scripts/json/config.json"))) {
         if (fs.existsSync("./scripts/json/config.json")) {
-          console.log("config.json file already exists");
+          if (DEBUG) console.log("config.json file already exists");
           myEmitter.emit(
             "log",
             "init.createFiles()",
@@ -127,7 +123,7 @@ function createFiles() {
 
       if (!fs.existsSync(path.join(__dirname, "./scripts/json/tokens.json"))) {
         if (fs.existsSync("./scripts/json/tokens.json")) {
-          console.log("tokens.json file already exists");
+          if (DEBUG) console.log("tokens.json file already exists");
           myEmitter.emit(
             "log",
             "init.createFiles()",
@@ -157,15 +153,13 @@ function createFiles() {
         }
       }
 
-      //--------
-
       if (fs.existsSync("./scripts/views")) {
         try {
           if (
             !fs.existsSync(path.join(__dirname, "./scripts/views/usagetxt"))
           ) {
             if (fs.existsSync("./scripts/views/usagetxt")) {
-              console.log("usuagetxt file already exists");
+              if (DEBUG) console.log("usage.txt file already exists");
               myEmitter.emit(
                 "log",
                 "init.createFiles()",
@@ -195,11 +189,9 @@ function createFiles() {
             }
           }
 
-          //---
-
           if (!fs.existsSync(path.join(__dirname, "./scripts/views/inittxt"))) {
             if (fs.existsSync("./scripts/views/inittxt")) {
-              console.log("inittxt file already exists");
+              if (DEBUG) console.log("init.txt file already exists");
               myEmitter.emit(
                 "log",
                 "init.createFiles()",
@@ -229,13 +221,11 @@ function createFiles() {
             }
           }
 
-          //---
-
           if (
             !fs.existsSync(path.join(__dirname, "./scripts/views/configtxt"))
           ) {
             if (fs.existsSync("./scripts/views/configtxt")) {
-              console.log("configtxt file already exists");
+              if (DEBUG) console.log("config.txt file already exists");
               myEmitter.emit(
                 "log",
                 "init.createFiles()",
@@ -265,13 +255,11 @@ function createFiles() {
             }
           }
 
-          //---
-
           if (
             !fs.existsSync(path.join(__dirname, "./scripts/views/tokentxt"))
           ) {
             if (fs.existsSync("./scripts/views/tokentxt")) {
-              console.log("tokentxt file already exists");
+              if (DEBUG) console.log("token.txt file already exists");
               myEmitter.emit(
                 "log",
                 "init.createFiles()",
@@ -300,8 +288,6 @@ function createFiles() {
               });
             }
           }
-
-          //---
         } catch (err) {
           console.log(err);
         }
@@ -314,8 +300,6 @@ function createFiles() {
           "views folder not found."
         );
       }
-
-      //----
     } catch (err) {
       console.log(err);
     }
@@ -332,33 +316,31 @@ function createFiles() {
 
 //---------------------------------------------------------------------------------------
 
-//---------------------------------------------------------------------------------------
-
 const myArgs = process.argv.slice(2);
 
 function initializeApp() {
-  if (DEBUG) console.log("init.initailizinApp(): started");
+  if (DEBUG) console.log("initailizinApp()");
 
   switch (myArgs[1]) {
     case "--all":
-      if (DEBUG) console.log("--all createFolders() & createFiles()");
+      if (DEBUG) console.log("--all, createFolders() & createFiles()");
       myEmitter.emit(
         "log",
         "init --all",
         "INFO",
-        "Create all folders and files."
+        "create all folders and files."
       );
       createFolders();
       createFiles();
       break;
     case "--mk":
-      if (DEBUG) console.log("init.createFolders(): reached");
-      myEmitter.emit("log", "init --mk", "INFO", "Create all folders.");
+      if (DEBUG) console.log("--mk, createFolders()\n");
+      myEmitter.emit("log", "init --mk", "INFO", "create all folders.");
       createFolders();
       break;
     case "--cat":
     case "--c":
-      if (DEBUG) console.log("init.createFiles(): reached");
+      if (DEBUG) console.log("--cat, createFiles()\n");
       myEmitter.emit("log", "init --cat", "INFO", "Create all files.");
       createFiles();
       break;

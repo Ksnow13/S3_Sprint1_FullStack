@@ -165,19 +165,22 @@ function resetConfig() {
 const Args = process.argv.slice(2);
 
 function configurationApp() {
-  if (DEBUG) console.log("config.configurationApp(): started");
+  if (DEBUG) console.log("configurationApp()");
 
   switch (Args[1]) {
     case "--show":
-      if (DEBUG) console.log("--show  config.showConfig(): reached");
+      if (DEBUG) console.log("--show,  showConfig()");
+      myEmitter.emit("log", "config --show", "INFO", "display config file.");
       showConfig();
       break;
     case "--set":
-      if (DEBUG) console.log("--set config.setConfig(): reached");
+      if (DEBUG) console.log("--set, setConfig()");
+      myEmitter.emit("log", "config --set", "INFO", "set config file.");
       setConfig();
       break;
     case "--reset":
-      if (DEBUG) console.log("--reset config.resetConfig(): reached");
+      if (DEBUG) console.log("--reset, resetConfig()");
+      myEmitter.emit("log", "config --reset", "INFO", "reset config file.");
       resetConfig();
       break;
     case "--help":
