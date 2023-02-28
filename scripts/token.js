@@ -78,29 +78,35 @@ function listToken() {
   if (DEBUG) console.log("token.listToken(): started\n");
   if (DEBUG) console.log(Args);
 
+  var tokenList = [];
+
   if (fs.existsSync("./scripts/json/tokens.json")) {
-    fs.readFile(__dirname + "/json/tokens.json", "utf-8", (error, data) => {
-      if (!error) {
-        let tokens = JSON.parse(data);
-        console.log("** User List **");
-        tokens.forEach((obj) => {
-          console.log(" * " + obj.username + ": " + obj.token);
-        });
-        myEmitter.emit(
-          "log",
-          "token.listToken()",
-          "INFO",
-          `Current token list was displayed.`
-        );
-      } else {
-        console.log(error);
-        myEmitter.emit(
-          "log",
-          "token.listToken()",
-          "ERROR",
-          "failed to list tokens"
-        );
-      }
+    return new Promise(function (resolve, reject) {
+      fs.readFile(__dirname + "/json/tokens.json", "utf-8", (error, data) => {
+        if (!error) {
+          let tokens = JSON.parse(data);
+          console.log("** User List **");
+          tokens.forEach((obj) => {
+            console.log(" * " + obj.username + ": " + obj.token);
+            tokenList.push(obj);
+          });
+          myEmitter.emit(
+            "log",
+            "token.listToken()",
+            "INFO",
+            `Current token list was displayed.`
+          );
+          resolve(tokenList);
+        } else {
+          console.log(error);
+          myEmitter.emit(
+            "log",
+            "token.listToken()",
+            "ERROR",
+            "failed to list tokens"
+          );
+        }
+      });
     });
   } else {
     console.log("token.josn file doesnt exist");
@@ -223,8 +229,6 @@ function updateToken() {
         }
       });
 
-      console.log(userFound);
-
       if (userFound === true) {
         tokens.forEach((obj) => {
           if (obj.username === Args[3]) {
@@ -248,8 +252,7 @@ function updateToken() {
                 break;
               default:
                 if (DEBUG) console.log(`unknow command ${Args[2]} was passed`);
-                if (DEBUG)
-                  console.log(`try --token [username] [phone or email]`);
+                console.log(`try --token [username] [phone or email]`);
                 myEmitter.emit(
                   "log",
                   "token.updateToken()",
@@ -264,9 +267,15 @@ function updateToken() {
             fs.writeFile(__dirname + "/json/tokens.json", userTokens, (err) => {
               if (err) console.log(err);
               else {
-                console.log(
-                  `Token record for ${Args[3]} was updated with ${Args[4]}.`
-                );
+                if (Args[2] === "e" || Args[2] === "email") {
+                  console.log(
+                    `email record for ${Args[3]} was updated with ${Args[4]}.`
+                  );
+                } else {
+                  console.log(
+                    `phone record for ${Args[3]} was updated with ${Args[4]}.`
+                  );
+                }
                 myEmitter.emit(
                   "log",
                   "token.updateToken()",
@@ -316,8 +325,6 @@ function searchTokenByUsername(username) {
           userFound = true;
         }
       });
-
-      console.log(userFound);
 
       if (userFound === true) {
         tokens.forEach((obj) => {
@@ -373,8 +380,6 @@ function searchTokenByEmail(email) {
         }
       });
 
-      console.log(userFound);
-
       if (userFound === true) {
         tokens.forEach((obj) => {
           if (obj.email === email) {
@@ -429,8 +434,6 @@ function searchTokenByPhone(phone) {
           userFound = true;
         }
       });
-
-      console.log(userFound);
 
       if (userFound === true) {
         tokens.forEach((obj) => {
@@ -543,35 +546,46 @@ function checkExperyDate() {
 const Args = process.argv.slice(2);
 
 function tokenApp() {
-  if (DEBUG) console.log("token.tokenApp(): started");
+  if (DEBUG) console.log("tokenApp()");
   switch (Args[1]) {
     case "--count":
-      if (DEBUG) console.log("--count  token.countToken: reached");
+      if (DEBUG) console.log("--count,  countToken()");
+      myEmitter.emit("log", "token --count", "INFO", "count tokens.");
       countToken();
       break;
     case "--list":
-      if (DEBUG) console.log("--count  token.listToken: reached");
+      if (DEBUG) console.log("--list,  listToken()");
+      myEmitter.emit("log", "token --list", "INFO", "display all tokens.");
       listToken();
       break;
     case "--new":
       if (Args.length !== 3) {
         console.log("invalid syntax. node myapp token --new [username]");
       } else {
-        if (DEBUG) console.log("--new token.newToken: reached");
+        if (DEBUG) console.log("--new, newToken()");
+        myEmitter.emit("log", "token --new", "INFO", "create new token.");
         newToken(Args[2]);
       }
       break;
     case "--update":
     case "--upd":
-      if (DEBUG) console.log("--count  token.countToken: reached");
+      if (DEBUG) console.log("--update,  updateToken()");
+      myEmitter.emit("log", "token --update", "INFO", "update token.");
       updateToken();
       break;
     case "--expired":
-      if (DEBUG) console.log("--search  token.checkExperyDate: reached");
+      if (DEBUG) console.log("--expired  checkExperyDate()");
+      myEmitter.emit(
+        "log",
+        "token --expired",
+        "INFO",
+        "display expired tokens."
+      );
       checkExperyDate();
       break;
     case "--search":
-      if (DEBUG) console.log("--search  token.searchToken: reached");
+      if (DEBUG) console.log("--search,  searchToken()");
+      myEmitter.emit("log", "token --search", "INFO", "search token.");
       switch (Args[2]) {
         case "u":
           searchTokenByUsername(Args[3]);
@@ -583,6 +597,12 @@ function tokenApp() {
           searchTokenByPhone(Args[3]);
           break;
         default:
+          myEmitter.emit(
+            "log",
+            "token --search",
+            "WARNING",
+            "invalid --search syntax."
+          );
           if (DEBUG)
             console.log(
               "invalid syntax. node myapp token --search [u] [username]"
@@ -610,4 +630,5 @@ module.exports = {
   newToken,
   updateToken,
   checkExperyDate,
+  listToken,
 };
