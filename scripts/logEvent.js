@@ -9,7 +9,7 @@ const path = require("path");
 
 const eventLogs = async (event, level, msg) => {
   var currentDate = `${format(new Date(), "dd/MM/yyyy\tHH:mm:ss")}`;
-  var itemToLog = `${level}\tDate/time - ${currentDate}\tRoute - [${event}]\t${msg}\t ID - ${uuid()}`;
+  var itemToLog = `${level}\tDate/time - ${currentDate}\tFunction - [${event}]\t${msg}\t ID - ${uuid()}`;
 
   if (DEBUG) console.log(itemToLog);
 

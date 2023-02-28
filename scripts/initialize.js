@@ -47,12 +47,10 @@ function createFolders() {
     }
   });
 
-  console.log("\n");
-
   if (DEBUG) console.log(`${match} folders found that already exist`);
 
   if (count === 0) {
-    console.log(" ** all folder alreadys exist **\n");
+    console.log("** all folder alreadys exist **\n");
     myEmitter.emit(
       "log",
       "init.createFolders()",
@@ -60,7 +58,9 @@ function createFolders() {
       "All folders already existed."
     );
   } else if (count < folders.length && match > 0) {
-    console.log(`** ${count} of ${folders.length} folders were created **\n`);
+    if (DEBUG)
+      console.log(`** ${count} of ${folders.length} folders were created **\n`);
+    console.log("** All folders successfully created **\n");
     myEmitter.emit(
       "log",
       "init.createFolders()",
@@ -68,7 +68,7 @@ function createFolders() {
       count + " of " + folders.length + " folders were created."
     );
   } else if (match === 0) {
-    console.log(" ** All folders successfully created **\n");
+    console.log("** All folders successfully created **\n");
     myEmitter.emit(
       "log",
       "init.createFolders()",
@@ -107,7 +107,7 @@ function createFiles() {
                 "config.json creation was unsuccessful."
               );
             } else {
-              if (DEBUG) console.log("Data written to config file");
+              console.log("config.json file was created");
               myEmitter.emit(
                 "log",
                 "init.createFiles()",
@@ -141,7 +141,7 @@ function createFiles() {
                 "token.json creation was unsuccessful."
               );
             } else {
-              if (DEBUG) console.log("Data written to tokens file");
+              console.log("token.json file was created");
               myEmitter.emit(
                 "log",
                 "init.createFiles()",
@@ -177,7 +177,7 @@ function createFiles() {
                     "usage.txt creation was unsuccessful."
                   );
                 } else {
-                  if (DEBUG) console.log("Data written to usage.txt file");
+                  console.log("usage.txt file was created");
                   myEmitter.emit(
                     "log",
                     "init.createFiles()",
@@ -209,7 +209,7 @@ function createFiles() {
                     "init.txt creation was unsuccessful."
                   );
                 } else {
-                  if (DEBUG) console.log("Data written to init.txt file");
+                  console.log("init.txt file was created");
                   myEmitter.emit(
                     "log",
                     "init.createFiles()",
@@ -243,7 +243,7 @@ function createFiles() {
                     "config.txt creation was unsuccessful."
                   );
                 } else {
-                  if (DEBUG) console.log("Data written to config.txt file");
+                  console.log("config.txt file was created");
                   myEmitter.emit(
                     "log",
                     "init.createFiles()",
@@ -277,7 +277,7 @@ function createFiles() {
                     "token.txt creation was unsuccessful."
                   );
                 } else {
-                  if (DEBUG) console.log("Data written to token.txt file");
+                  console.log("token.txt was created");
                   myEmitter.emit(
                     "log",
                     "init.createFiles()",
@@ -292,7 +292,7 @@ function createFiles() {
           console.log(err);
         }
       } else {
-        console.log("folder doesn't exist --mk first before --cat");
+        console.log("some folders needed doesn't exist, try --mk before --cat");
         myEmitter.emit(
           "log",
           "init.createFiles()",
@@ -304,7 +304,7 @@ function createFiles() {
       console.log(err);
     }
   } else {
-    console.log("folder doesn't exist --mk first before --cat");
+    console.log("some folders needed doesn't exist, try --mk before --cat");
     myEmitter.emit(
       "log",
       "init.createFiles()",

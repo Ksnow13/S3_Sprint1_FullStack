@@ -11,7 +11,6 @@ const myEmitter = new MyEmitter();
 myEmitter.on("log", (event, level, msg) => logEvents(event, level, msg));
 
 const { configurationJson, configtxt } = require("./template");
-const { match } = require("assert");
 
 function showConfig() {
   if (DEBUG) console.log("config.showConfig(): started\n");
@@ -77,7 +76,7 @@ function setConfig() {
 
           fs.writeFile(__dirname + "/json/config.json", data, (error) => {
             if (error) throw error;
-            if (DEBUG) console.log("Config file successfully updated.");
+            console.log("Config file successfully updated.");
             myEmitter.emit(
               "log",
               "config.setConfig()",
@@ -130,7 +129,7 @@ function resetConfig() {
           defaultConfigData,
           (error) => {
             if (error) throw error;
-            if (DEBUG) console.log("Config file reset to original state");
+            console.log("Config file has been reset.");
             myEmitter.emit(
               "log",
               "config.resetConfig()",

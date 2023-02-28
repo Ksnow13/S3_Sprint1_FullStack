@@ -5,7 +5,12 @@ global.DEBUG = true;
 const http = require("http");
 const fs = require("fs");
 const { parse } = require("querystring");
-const { newToken, countToken, checkExperyDate } = require("./scripts/token");
+const {
+  newToken,
+  countToken,
+  checkExperyDate,
+  listToken,
+} = require("./scripts/token");
 const { tr } = require("date-fns/locale");
 
 const server = http.createServer(async (request, response) => {
@@ -95,13 +100,27 @@ const server = http.createServer(async (request, response) => {
         <!doctype html>
                 <html>
                 <body>
-                    expired token(s) ${JSON.stringify(expiredList)} <br />
+                    expired token(s) ${JSON.stringify(
+                      expiredList
+                    )} <br /> <br />
                     <a href="http://localhost:3000">[home]</a>
                 </body>
                 </html>
         `);
 
       break;
+    case "/allTokens":
+      var tokenList = await listToken();
+      response.end(`
+        <!doctype html>
+                <html>
+                <body>
+                    all token(s) ${JSON.stringify(tokenList)} <br /> <br />
+                    <a href="http://localhost:3000">[home]</a>
+                </body>
+                </html>
+        `);
+
     default:
       response.statusCode = 404;
       path += "404.html";
