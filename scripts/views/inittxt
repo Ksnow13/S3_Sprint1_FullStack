@@ -1,10 +1,7 @@
-
-
-myapp init <command> <option>
+index init <command> <option>
 
 Usage:
 
-myapp init --all          creates the folder structure and config file
-myapp init --mk           creates the folder structure
-myapp init --cat          creates the config file with default settings
-
+index init --all displays all help options
+index init --mk creates all folders and files
+index init --cat creates all folders
