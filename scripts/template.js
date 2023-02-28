@@ -9,8 +9,6 @@ const configurationJson = {
   database: "exampledb",
 };
 
-//--------------------
-
 const tokenJson = [
   {
     username: "example_username",
@@ -24,11 +22,7 @@ const tokenJson = [
   },
 ];
 
-//---------------------
-
 const folders = ["models", "views", "routes", "logHistory", "json"];
-
-//--------------------
 
 const usagetxt = `
 
@@ -54,8 +48,6 @@ index token --search p <phone>          searches a token for a given phone numbe
 
 `;
 
-//-------------------
-
 const inittxt = `
 
 index init <command> <option>
@@ -68,8 +60,6 @@ index init --cat          creates all folders
 
 `;
 
-//------------------
-
 const configtxt = `
 
 index <command> <option>
@@ -81,8 +71,6 @@ index config --reset    resets the config file with default settings
 index config --set      sets a specific config setting
 
 `;
-
-//---------------------
 
 const tokentxt = `
 

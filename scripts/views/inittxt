@@ -1,4 +1,4 @@
-index init <command> <option>
+index init [command] [option]
 
 Usage:
 
