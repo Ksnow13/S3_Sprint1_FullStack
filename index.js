@@ -5,7 +5,7 @@
  * see usage.txt file
  *
  * Start Date: 16 Feb 2023
- * Authors: Kyle S, Ken C, Tyler P
+ * Authors: Kyle S, Ken C, Tyler P, Kayleigh M
  *
  *************************/
 
