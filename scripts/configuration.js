@@ -1,6 +1,19 @@
-//---------------------------------------
+/*************************
+ * Folder Name: Sprint1
+ * Purpose: Full Stack sprint 1: build a simple CLI for a web application that needs to confirm new user accounts.
+ *
+ * see usage.txt file
+ *
+ * Start Date: 16 Feb 2023
+ * Authors: Kyle S, Ken C, Tyler P, Kayleigh M
+ *
+ *************************/
+
+// syntax for including the file system module
 
 const fs = require("fs");
+
+// get the reference of EventEmitter class of events module
 
 const logEvents = require("./logEvent");
 const EventEmitter = require("events");
@@ -10,7 +23,11 @@ const myEmitter = new MyEmitter();
 
 myEmitter.on("log", (event, level, msg) => logEvents(event, level, msg));
 
+// getting data from templates.js
+
 const { configurationJson, configtxt } = require("./template");
+
+// function to show config file
 
 function showConfig() {
   if (DEBUG) console.log("config.showConfig(): started\n");
@@ -47,7 +64,7 @@ function showConfig() {
   }
 }
 
-//----------------------------------------------------------------------
+// function to change/set values in a the file
 
 function setConfig() {
   if (DEBUG) console.log("config.setConfig(): started\n");
@@ -114,7 +131,7 @@ function setConfig() {
   }
 }
 
-//---------------------------------------------------------------------------
+// function to reset the file back to default
 
 function resetConfig() {
   if (DEBUG) console.log("config.ressetConfig(): started\n");
@@ -159,7 +176,7 @@ function resetConfig() {
   }
 }
 
-//---------------------------------------------------------------------------
+// main CLI function for config
 
 const Args = process.argv.slice(2);
 

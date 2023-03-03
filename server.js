@@ -1,10 +1,15 @@
-//-----------------------------------------------------------------
+// global.debug to help with debuging
 
 global.DEBUG = true;
+
+// syntax for including the file system and http module
 
 const http = require("http");
 const fs = require("fs");
 const { parse } = require("querystring");
+
+// getting functions from token.js
+
 const {
   newToken,
   countToken,
@@ -12,6 +17,8 @@ const {
   listToken,
 } = require("./scripts/token");
 const { tr } = require("date-fns/locale");
+
+// creating function to set up http server with a swtich statement to gather all html files / routes
 
 const server = http.createServer(async (request, response) => {
   var path = "./scripts/views/";
@@ -547,11 +554,11 @@ const server = http.createServer(async (request, response) => {
   </body>
 </html>  
             `);
-
               }
             }
           );
-        }); break;
+        });
+        break;
       } else {
         response.statusCode = 200;
         path += "createToken.html";
@@ -1071,9 +1078,7 @@ const server = http.createServer(async (request, response) => {
                       <h1>expired tokens:</h1>
       
                       <h2>
-                          ${JSON.stringify(
-        expiredList
-      )} <br /> <br /></h2>
+                          ${JSON.stringify(expiredList)} <br /> <br /></h2>
                       <button><a class="button" href="http://localhost:3000/adminmenu">admin menu</a></button>
                   </form>
               </div>
@@ -1350,7 +1355,7 @@ const server = http.createServer(async (request, response) => {
       break;
   }
 
-  //-----------------------------------------------------------
+  // function to fetch the html data
 
   function fetchFile(path) {
     fs.readFile(path, function (err, data) {
@@ -1369,7 +1374,7 @@ const server = http.createServer(async (request, response) => {
   }
 });
 
-//server.listen(3000);
+//function to set up a port and let the user know the program is working and servers are running.
 
 server.listen(3000, "localhost", () => {
   console.log(
@@ -1378,7 +1383,7 @@ server.listen(3000, "localhost", () => {
   console.log("Press Ctrl C to terminate...");
 });
 
-//----------------------------------------------
+// function for gather the info from the above switch statements and turning them into an html page
 
 function getRequestedData(request, callback) {
   const FORM_URLENCODED = "application/x-www-form-urlencoded";
@@ -1394,5 +1399,3 @@ function getRequestedData(request, callback) {
     callback(null);
   }
 }
-
-//--------------------------------------------------------

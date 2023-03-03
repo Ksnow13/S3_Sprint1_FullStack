@@ -1,11 +1,17 @@
-//
+// this file is for setting up the event logs
+
+// npm packages
 
 const { format } = require("date-fns");
 const { v4: uuid } = require("uuid");
 
+// getting node modules
+
 const fs = require("fs");
 const fsPromises = require("fs").promises;
 const path = require("path");
+
+// function for the event listener
 
 const eventLogs = async (event, level, msg) => {
   var currentDate = `${format(new Date(), "dd/MM/yyyy\tHH:mm:ss")}`;
