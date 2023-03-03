@@ -1,10 +1,23 @@
-//-------------------------------------------------------------------------
+/*************************
+ * Folder Name: Sprint1
+ * Purpose: Full Stack sprint 1: build a simple CLI for a web application that needs to confirm new user accounts.
+ *
+ * see usage.txt file
+ *
+ * Start Date: 16 Feb 2023
+ * Authors: Kyle S, Ken C, Tyler P, Kayleigh M
+ *
+ *************************/
+
+// syntax for including the file system and path module
 
 const fs = require("fs");
 
 const fsPromises = require("fs").promises;
 
 const path = require("path");
+
+// get the reference of EventEmitter class of events module
 
 const eventLogs = require("./logEvent");
 const EventEmitter = require("events");
@@ -13,7 +26,7 @@ const myEmitter = new MyEmitter();
 
 myEmitter.on("log", (event, level, msg) => eventLogs(event, level, msg));
 
-//---------------------------------------------------------------------------
+// getting data from templates.js
 
 const {
   folders,
@@ -24,6 +37,8 @@ const {
   configtxt,
   tokentxt,
 } = require("./template");
+
+// function to create folders
 
 function createFolders() {
   if (DEBUG) console.log("createFolders(): started\n");
@@ -78,7 +93,7 @@ function createFolders() {
   }
 }
 
-//---------------------------------------------------------------------------------------
+// function to create files
 
 function createFiles() {
   if (DEBUG) console.log("createFiles(): started\n");
@@ -314,7 +329,7 @@ function createFiles() {
   }
 }
 
-//---------------------------------------------------------------------------------------
+// main CLI function for init
 
 const myArgs = process.argv.slice(2);
 

@@ -1,7 +1,20 @@
-//---------------------------------------
+/*************************
+ * Folder Name: Sprint1
+ * Purpose: Full Stack sprint 1: build a simple CLI for a web application that needs to confirm new user accounts.
+ *
+ * see usage.txt file
+ *
+ * Start Date: 16 Feb 2023
+ * Authors: Kyle S, Ken C, Tyler P, Kayleigh M
+ *
+ *************************/
+
+// syntax for including the file system and path module
 
 const fs = require("fs");
 const path = require("path");
+
+// get the reference of EventEmitter class of events module
 
 const logEvents = require("./logEvent");
 const EventEmitter = require("events");
@@ -11,11 +24,13 @@ const myEmitter = new MyEmitter();
 
 myEmitter.on("log", (event, level, msg) => logEvents(event, level, msg));
 
+// getting the npm packages
+
 const crc32 = require("crc/crc32");
 const { format, addDays } = require("date-fns");
 const { tokentxt } = require("./template");
 
-//-----------------------------------------------------------------------------------
+// function the count the number of tokens
 
 function countToken() {
   if (DEBUG) console.log("token.countToken(): started\n");
@@ -72,7 +87,7 @@ function countToken() {
   }
 }
 
-//-----------------------------------------------------------------------------------
+// function to list all tokens
 
 function listToken() {
   if (DEBUG) console.log("token.listToken(): started\n");
@@ -119,7 +134,7 @@ function listToken() {
   }
 }
 
-//-----------------------------------------------------------------------------------
+// function to create a new token
 
 function newToken(username) {
   if (DEBUG) console.log("token.newToken(): started\n");
@@ -209,7 +224,7 @@ function newToken(username) {
   return tokenToEnter.token;
 }
 
-//-----------------------------------------------------------------------------------
+// function to update the values of a token
 
 function updateToken() {
   if (DEBUG) console.log("token.updateToken(): started\n");
@@ -307,7 +322,7 @@ function updateToken() {
   }
 }
 
-//-----------------------------------------------------------------------------------
+// function to search for a token by username
 
 function searchTokenByUsername(username) {
   if (DEBUG) console.log("token.searchToken(): started\n");
@@ -361,7 +376,7 @@ function searchTokenByUsername(username) {
   }
 }
 
-//-----------------------------------------------------------------------------------
+// function to search for a token by email
 
 function searchTokenByEmail(email) {
   if (DEBUG) console.log("token.searchToken(): started\n");
@@ -416,7 +431,7 @@ function searchTokenByEmail(email) {
   }
 }
 
-//-----------------------------------------------------------------------------------
+// function to search for a token by phone number
 
 function searchTokenByPhone(phone) {
   if (DEBUG) console.log("token.searchToken(): started\n");
@@ -472,7 +487,7 @@ function searchTokenByPhone(phone) {
   }
 }
 
-//----------------------------------------------------------------------------------
+// function to find expired tokens
 
 function checkExperyDate() {
   if (DEBUG) console.log("token.checkExperyDate(): started\n");
@@ -541,7 +556,7 @@ function checkExperyDate() {
   }
 }
 
-//-----------------------------------------------------------------------------------
+// main CLI function for token
 
 const Args = process.argv.slice(2);
 

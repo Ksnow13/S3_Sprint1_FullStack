@@ -9,7 +9,11 @@
  *
  *************************/
 
+// global.debug to help with debuging
+
 global.DEBUG = true;
+
+// getting functions and data from other files
 
 const { initializeApp } = require("./scripts/initialize");
 
@@ -18,6 +22,8 @@ const { configurationApp } = require("./scripts/configuration");
 const { tokenApp } = require("./scripts/token");
 
 const { usagetxt } = require("./scripts/template");
+
+// main switch statement for the CLI
 
 const Args = process.argv.slice(2);
 if (DEBUG)
